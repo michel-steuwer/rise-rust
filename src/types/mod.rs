@@ -1,40 +1,37 @@
-use crate::types::data_type::DataType;
-
-mod kind;
-mod address_space;
-mod nat;
-mod nat2nat;
+pub mod kind;
+pub mod address_space;
+pub mod nat;
+pub mod nat2nat;
 #[macro_use]
-mod nat2data;
+pub mod nat2data;
 #[macro_use]
-mod data_type;
-mod r#type;
+pub mod data_type;
+pub mod r#type;
 
 fn print_dep_fun_identifier(t: r#type::Type) -> () {
     match t {
-        r#type::Type::DepFunType(x, t) => print!("{}\n", x.name()),
+        r#type::Type::DepFunType(x,
+                                 t) => print!("{}\n", x.name()),
         _ => {}
     }
 }
 
+use data_type::DataType;
+
 #[test]
 fn test_print_dep_fun_identifier() {
     use r#type::Type::*;
-    // let t = Type::Data(DataType::ScalarType(data_type::ScalarType::Int));
-    let t = DepFunType(
-        Box::new(DataType::Identifier(String::from("x"))),
-        Box::new(Data(DataType::ScalarType(data_type::ScalarType::Int)))
+    use r#type::*;
+    use data_type::*;
+
+    let t = dep_fun_t(
+        ident("x"),
+        dt(int())
     );
 
-    let  n = nat::Nat::Identifier(String::from("n"));
-    let dt = data_type::DataType::ArrayType(
-        n,
-        Box::new(DataType::ScalarType(data_type::ScalarType::Int))
-    );
+    let dt = array_type(nat::ident("n"), int());
 
-    let  n2 = nat::Nat::Identifier(String::from("n"));
-
-    let n2d = n2d!( ("n") => dt!(n2; DataType::ScalarType(data_type::ScalarType::Int)));
+    dbg!(dt);
 
     print_dep_fun_identifier(t);
 }

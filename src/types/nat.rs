@@ -1,5 +1,5 @@
 use super::nat2nat::Nat2Nat;
-use super::kind::*;
+use super::kind::{Kind, Identifier};
 
 #[derive(Debug)]
 pub enum Nat {
@@ -21,4 +21,26 @@ impl Identifier for Nat {
             _ => unreachable!()
         }
     }
+}
+
+use Nat::*;
+
+pub fn ident(name: &str) -> Nat {
+    Identifier(String::from(name))
+}
+
+pub fn lit(i: i32) -> Nat {
+    Literal(i)
+}
+
+pub fn u_op(name: &str, n: Nat) -> Nat {
+    UnaryOp(String::from(name), Box::new(n))
+}
+
+pub fn bin_op(n1: Nat, name: &str, n2: Nat) -> Nat {
+    BinaryOp(Box::new(n1), String::from(name), Box::new(n2))
+}
+
+pub fn apply(n2n: Nat2Nat, n: Nat) -> Nat {
+    Apply(Box::new(n2n), Box::new(n))
 }
